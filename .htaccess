@@ -1,0 +1,139 @@
+# ========================================
+# SBM Apparels - .htaccess Configuration
+# ========================================
+# Copy this to your public_html folder for optimal GoDaddy hosting
+# File: .htaccess (Note: starts with a dot)
+
+# ========================================
+# Enable Mod Rewrite
+# ========================================
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Redirect HTTP to HTTPS (if enabled on your domain)
+    # RewriteCond %{HTTPS} off
+    # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Remove .html extension
+    # RewriteCond %{REQUEST_FILENAME} !-f
+    # RewriteCond %{REQUEST_FILENAME} !-d
+    # RewriteRule ^([^\.]+)$ $1.html [NC, L]
+</IfModule>
+
+# ========================================
+# Enable Browser Caching
+# ========================================
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # Cache images for 30 days
+    ExpiresByType image/jpeg "access plus 30 days"
+    ExpiresByType image/gif "access plus 30 days"
+    ExpiresByType image/png "access plus 30 days"
+    ExpiresByType image/svg+xml "access plus 30 days"
+    ExpiresByType image/webp "access plus 30 days"
+
+    # Cache CSS for 30 days
+    ExpiresByType text/css "access plus 30 days"
+
+    # Cache JavaScript for 30 days
+    ExpiresByType application/javascript "access plus 30 days"
+    ExpiresByType application/x-javascript "access plus 30 days"
+
+    # Cache fonts for 1 year
+    ExpiresByType font/ttf "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/x-font-ttf "access plus 1 year"
+
+    # HTML - refresh every 24 hours
+    ExpiresByType text/html "access plus 24 hours"
+
+    # Default cache
+    ExpiresDefault "access plus 2 days"
+</IfModule>
+
+# ========================================
+# Enable GZIP Compression
+# ========================================
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/javascript application/javascript application/x-javascript
+    AddOutputFilterByType DEFLATE application/xml application/rss+xml
+    AddOutputFilterByType DEFLATE application/atom+xml
+    AddOutputFilterByType DEFLATE image/svg+xml
+    AddOutputFilterByType DEFLATE font/ttf font/otf
+    AddOutputFilterByType DEFLATE application/x-font-ttf application/x-font-otf
+</IfModule>
+
+# ========================================
+# Set Proper Headers
+# ========================================
+<IfModule mod_headers.c>
+    # Improve security
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+
+    # Cache headers
+    <FilesMatch "\.(jpg|jpeg|png|gif|svg|webp)$">
+        Header set Cache-Control "max-age=2592000, public"
+    </FilesMatch>
+
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "max-age=2592000, public"
+    </FilesMatch>
+
+    <FilesMatch "\.(html|htm)$">
+        Header set Cache-Control "max-age=86400, public"
+    </FilesMatch>
+
+    <FilesMatch "\.(woff|woff2|ttf|otf|eot)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </FilesMatch>
+</IfModule>
+
+# ========================================
+# Block Access to Sensitive Files
+# ========================================
+<FilesMatch "\.(env|htaccess|htpasswd|json|lock|md|php.bak)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# ========================================
+# Set Default File
+# ========================================
+DirectoryIndex index.html
+
+# ========================================
+# Custom Error Pages (Optional)
+# ========================================
+# ErrorDocument 404 /404.html
+# ErrorDocument 500 /500.html
+
+# ========================================
+# Enable Proper MIME Types
+# ========================================
+<IfModule mod_mime.c>
+    AddType application/javascript js
+    AddType application/x-javascript javascript
+    AddType text/css css
+    AddType image/svg+xml svg svgz
+    AddEncoding gzip svgz
+    AddType application/font-woff2 woff2
+    AddType application/x-font-ttf ttf otf
+    AddType font/woff woff
+    AddType image/webp webp
+</IfModule>
+
+# ========================================
+# END OF CONFIGURATION
+# ========================================
